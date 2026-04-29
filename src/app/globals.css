@@ -1,26 +1,188 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────
+   MongoCraft design tokens
+   Dark theme is default. `.light` class on <html> opts in.
+   ───────────────────────────────────────────────────────────── */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Surfaces (page → panels → cards → raised) */
+  --surface-0: #0b0f14;
+  --surface-1: #11161d;
+  --surface-2: #161c25;
+  --surface-3: #1f2733;
+
+  /* Text */
+  --text-1: #e6edf3;
+  --text-2: #b3becb;
+  --text-3: #6e7c8c;
+
+  /* Borders */
+  --border:        #232c38;
+  --border-strong: #2d3845;
+
+  /* Brand & semantic */
+  --brand:        #3fb950;
+  --brand-strong: #2ea043;
+  --brand-soft:   rgba(63, 185, 80, 0.12);
+  --accent:       #58a6ff;
+  --danger:       #f85149;
+  --warning:      #d29922;
+  --success:      #3fb950;
+
+  /* Effects */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.5);
+  --ring:      0 0 0 3px rgba(63, 185, 80, 0.25);
+
+  /* Type */
+  --font-sans: var(--font-plex-sans), "IBM Plex Sans", ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace,
+    SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+  color-scheme: dark;
+}
+
+html.light {
+  --surface-0: #ffffff;
+  --surface-1: #f6f8fa;
+  --surface-2: #ffffff;
+  --surface-3: #eaeef2;
+
+  --text-1: #1f2328;
+  --text-2: #424a53;
+  --text-3: #656d76;
+
+  --border:        #d0d7de;
+  --border-strong: #afb8c1;
+
+  --brand:        #1f883d;
+  --brand-strong: #1a7f37;
+  --brand-soft:   rgba(31, 136, 61, 0.10);
+  --accent:       #0969da;
+  --danger:       #cf222e;
+  --warning:      #9a6700;
+  --success:      #1a7f37;
+
+  --shadow-sm: 0 1px 2px rgba(31, 35, 40, 0.08);
+  --shadow-md: 0 8px 24px rgba(31, 35, 40, 0.12);
+  --shadow-lg: 0 24px 48px rgba(31, 35, 40, 0.18);
+  --ring:      0 0 0 3px rgba(31, 136, 61, 0.20);
+
+  color-scheme: light;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--surface-0);
+  --color-foreground: var(--text-1);
+  --color-brand:      var(--brand);
+  --color-border:     var(--border);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ─── Base ────────────────────────────────────────────────── */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  background: var(--surface-0);
+  color: var(--text-1);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Ambient gradient (dark only) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(63, 185, 80, 0.07), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(88, 166, 255, 0.05), transparent 55%);
+}
+html.light body::before { display: none; }
+
+body > * { position: relative; z-index: 1; }
+
+.font-mono { font-family: var(--font-mono); }
+
+/* ─── Form controls ──────────────────────────────────────── */
+input, textarea, select, button { font: inherit; color: inherit; }
+
+input::placeholder,
+textarea::placeholder { color: var(--text-3); opacity: 0.8; }
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: 0.55; }
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+          appearance: none;
+  margin: 0;
+}
+input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+
+::selection { background: var(--brand-soft); color: var(--text-1); }
+
+/* ─── Scrollbars ─────────────────────────────────────────── */
+* { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+*::-webkit-scrollbar         { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track   { background: transparent; }
+*::-webkit-scrollbar-thumb   {
+  background: var(--border);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 8px;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--border-strong); background-clip: padding-box; }
+*::-webkit-scrollbar-corner  { background: transparent; }
+
+/* ─── Animations ─────────────────────────────────────────── */
+@keyframes spin     { to { transform: rotate(360deg); } }
+@keyframes fade-in  {
+  from { opacity: 0; transform: translateY(6px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+@keyframes overlay-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+.spin-slow         { animation: spin 1.2s linear infinite; transform-origin: center; }
+.animate-fade-in   { animation: fade-in 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.animate-overlay-in{ animation: overlay-in 140ms ease-out both; }
+.animate-pulse-soft{ animation: pulse-soft 1.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+/* ─── Light-mode tweaks for inline hover:bg-white/* utilities ── */
+html.light .hover\:bg-white\/5:hover  { background-color: rgba(31, 35, 40, 0.05) !important; }
+html.light .hover\:bg-white\/8:hover  { background-color: rgba(31, 35, 40, 0.07) !important; }
+html.light .hover\:bg-white\/10:hover { background-color: rgba(31, 35, 40, 0.08) !important; }
