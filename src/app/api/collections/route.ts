@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 
     // Get approximate counts
     const withCounts = await Promise.all(
-      collections.map(async (col) => {
+      collections.map(async (col:any) => {
         try {
           const count = await db.collection(col.name).estimatedDocumentCount()
           return { name: col.name, type: col.type, count }
