@@ -1,16 +1,38 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
+import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'sonner'
 import ThemeProvider from '@/components/layout/ThemeProvider'
 
+const plexSans = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-plex-sans',
+  display: 'swap',
+})
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-plex-mono',
+  display: 'swap',
+})
+
 export const metadata: Metadata = {
-  title: 'MongoCraft — MongoDB GUI',
-  description: 'A secure, responsive MongoDB management application',
+  title: 'GS-MongoDB Handler',
+  description: 'A secure, responsive MongoDB management application By Geeta Systems',
+}
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)',  color: '#0b0f14' },
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+  ],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`} suppressHydrationWarning>
       <body>
         <ThemeProvider>
           {children}
