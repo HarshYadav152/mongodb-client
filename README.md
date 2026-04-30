@@ -233,5 +233,5 @@ or
 
 ## License
 
-Proprietary — Geeta Systems.
-
+MIT Licence
+Geeta Systems
